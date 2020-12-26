@@ -27,10 +27,17 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
       title_match ||
       changeInfo.audible != undefined ||
       changeInfo.url != undefined) {
-    // If no longer audible, let customize.js know.
+    // If no longer audible, let customize.js know by appending '.' to title.
     if (changeInfo.audible == false) {
-      chrome.tabs.executeScript(tabId, {code:"document.title += '.';"});
+      chrome.tabs.executeScript(tabId, {code:`document.title += '.';`});
+    } else if (changeInfo.audible == true) {
+      chrome.tabs.executeScript(
+        tabId, {code:`while (document.title.endsWith('.')) {
+                        document.title = document.title.slice(0, -1);
+                      }`
+               });
     }
+
     chrome.tabs.executeScript(
       tabId,
       {file: 'customize.js'}
