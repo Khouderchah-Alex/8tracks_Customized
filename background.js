@@ -15,9 +15,16 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     return;
   }
 
-  var title_match = tab.title.match(/►/g);
+  // Note: This match is predicated on cVim-8tracks title interactions. If the
+  // browser doesn't have cVim and customize.js consequently doesn't need to
+  // modify the title, all title change events would likely be fair game here.
+  //
+  // TODO: Do this match conditionally when different features can be chosen by
+  //       the user.
+  var title_match = tab.title.match(/►\s*\d+\s/);
+
   if (changeInfo.status == 'complete' ||
-      (title_match && title_match.length > 1) ||
+      title_match ||
       changeInfo.audible != undefined ||
       changeInfo.url != undefined) {
     // If no longer audible, let customize.js know.
