@@ -24,10 +24,8 @@ function cvim_title_fix() {
   }
   new_title += match[3];
 
-  if (stop_playing) {
-    while (new_title.endsWith(end_char)) {
-      new_title = new_title.slice(0, -1);
-    }
+  while (new_title.endsWith(end_char)) {
+    new_title = new_title.slice(0, -1);
   }
   document.title = new_title;
 }
@@ -39,7 +37,7 @@ function repair_youtube_links() {
   var tracks = playlist.childNodes;
   for (i=0; i < tracks.length; i++) {
     var info = Array.from(tracks[i].querySelectorAll('.t,.a').entries());
-    info = info.map(node => node[1].innerText)
+    info = info.map(node => node[1].innerText);
     var query = info.join(' ').split(' ').join('+');
 
     var yt = tracks[i].getElementsByClassName('yt');
