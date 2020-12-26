@@ -32,5 +32,22 @@ function cvim_title_fix() {
   document.title = new_title;
 }
 
+function repair_youtube_links() {
+  var playlist = document.getElementById('tracks_played');
+  if (!playlist) { return; }
+
+  var tracks = playlist.childNodes;
+  for (i=0; i < tracks.length; i++) {
+    var info = Array.from(tracks[i].querySelectorAll('.t,.a').entries());
+    info = info.map(node => node[1].innerText)
+    var query = info.join(' ').split(' ').join('+');
+
+    var yt = tracks[i].getElementsByClassName('yt');
+    if (!yt || yt.length < 1) { continue; }
+    yt[0].href = 'https://www.youtube.com/results?search_query=' + query;
+  }
+}
+
 player_to_top();
 cvim_title_fix();
+repair_youtube_links();

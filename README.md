@@ -8,3 +8,5 @@ supports:
   * Fixing an interaction between 8tracks native js and
     [cVim](https://github.com/1995eaton/chromium-vim) showtabindices, which
     leads to a stacking of '►' and the tab index.
+  * Replacing the default youtube links for songs (which doesn't seem to be
+    functional) with a link performing a YT query.
