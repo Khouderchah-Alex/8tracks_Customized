@@ -16,7 +16,15 @@ chrome.tabs.onUpdated.addListener( function (tabId, changeInfo, tab) {
     return;
   }
 
-  if (changeInfo.status == 'complete' && tab.active) {
+  var title_match = tab.title.match(/►/g);
+  if (changeInfo.status == 'complete' ||
+      (title_match && title_match.length > 1) ||
+      changeInfo.audible != undefined ||
+      changeInfo.url != undefined) {
+    // If no longer audible, let customize.js know.
+    if (changeInfo.audible == false) {
+      chrome.tabs.executeScript(tabId, {code:"document.title += '.';"});
+    }
     chrome.tabs.executeScript(
       tabId,
       {file: 'customize.js'}
