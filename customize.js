@@ -38,7 +38,11 @@ function repair_youtube_links() {
   for (i=0; i < tracks.length; i++) {
     var info = Array.from(tracks[i].querySelectorAll('.t,.a').entries());
     info = info.map(node => node[1].innerText);
-    var query = info.join(' ').split(' ').join('+');
+    var query = info
+        .join(' ')
+        .split(' ')
+        .map(str => encodeURIComponent(str))
+        .join('+');
 
     var yt = tracks[i].getElementsByClassName('yt');
     if (!yt || yt.length < 1) { continue; }
