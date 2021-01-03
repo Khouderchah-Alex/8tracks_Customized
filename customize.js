@@ -30,23 +30,31 @@ function cvim_title_fix() {
   document.title = new_title;
 }
 
+function repair_youtube_link(track_node) {
+  var info = Array.from(track_node.querySelectorAll('.t,.a').values());
+  info = info.map(node => node.innerText);
+  var query = info
+      .join(' ')
+      .split(' ')
+      .map(str => encodeURIComponent(str))
+      .join('+');
+
+  var yt = track_node.getElementsByClassName('yt');
+  if (!yt || yt.length < 1) { return; }
+  yt[0].href = 'https://www.youtube.com/results?search_query=' + query;
+}
+
 function repair_youtube_links() {
+  // Replace links in main tracklist.
   var playlist = document.getElementById('tracks_played');
-  if (!playlist) { return; }
+  if (playlist) {
+    Array.from(playlist.childNodes).map(repair_youtube_link);
+  }
 
-  var tracks = playlist.childNodes;
-  for (i=0; i < tracks.length; i++) {
-    var info = Array.from(tracks[i].querySelectorAll('.t,.a').entries());
-    info = info.map(node => node[1].innerText);
-    var query = info
-        .join(' ')
-        .split(' ')
-        .map(str => encodeURIComponent(str))
-        .join('+');
-
-    var yt = tracks[i].getElementsByClassName('yt');
-    if (!yt || yt.length < 1) { continue; }
-    yt[0].href = 'https://www.youtube.com/results?search_query=' + query;
+  // Replace link in player.
+  var player = document.getElementById('now_playing');
+  if (player) {
+    repair_youtube_link(player);
   }
 }
 
